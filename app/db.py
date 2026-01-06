@@ -1,6 +1,6 @@
 from collections.abc import AsyncGenerator
 import uuid
-from datetime import datetime
+from datetime import datetime,timezone
 from sqlalchemy import Column,String,Text,DateTime,ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.asyncio import AsyncSession,create_async_engine,async_sessionmaker
@@ -20,7 +20,7 @@ class Post(Base):
     url=Column(String,nullable=False)
     file_type=Column(String,nullable=False)
     file_name=Column(String,nullable=False)
-    created_at=Column(DateTime,nullable=datetime.utcnow)
+    created_at=Column(DateTime(timezone=True),default=lambda:datetime.now(timezone.utc),nullable=False)
 
 engine=create_async_engine(DATABASE_URL)
 async_session_maker=async_sessionmaker(engine,expire_on_commit=False)
